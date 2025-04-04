@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terabox Player</title>
+    <style>
+        body { margin: 20px; font-family: Arial; }
+        #player { width: 80%; margin-top: 20px; }
+        input { width: 500px; padding: 10px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Terabox Video Player</h2>
+    <input type="text" id="inputUrl" placeholder="Terabox URL یہاں پیسٹ کریں...">
+    <button onclick="playVideo()">Play</button><br>
+    <video id="player" controls></video>
+
+    <script>
+        // Cloudflare Worker URL یہاں ڈالیں
+        const WORKER_URL = "YOUR_CLOUDFLARE_WORKER_URL"; // مثال: terabox-proxy.abc123.workers.dev
+
+        function playVideo() {
+            const inputUrl = document.getElementById('inputUrl').value;
+            if(!inputUrl) return alert("URL ڈالیں");
+
+            const video = document.getElementById('player');
+            const proxyUrl = `${WORKER_URL}/?url=${encodeURIComponent(inputUrl)}`;
+            
+            video.src = proxyUrl;
+            video.load();
+            video.play().catch(err => alert("ویڈیو چلائی نہیں جا سکی: " + err.message));
+        }
+    </script>
+</body>
+</html>
